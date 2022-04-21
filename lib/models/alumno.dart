@@ -1,5 +1,5 @@
 class alumno {
-  int id;
+  var  id;
   String nombre;
   String apellidos;
   String correo;
@@ -8,7 +8,8 @@ class alumno {
   String genero;
   String semestre;
   String carrera;
+  String fecha_nac;
 
-  alumno(this.id, this.nombre, this.apellidos, this.correo, this.noControl,
-      this.password, this.genero, this.semestre, this.carrera);
+  alumno(this.nombre, this.apellidos, this.correo, this.noControl,
+      this.password, this.genero, this.semestre, this.carrera,this.fecha_nac);
 }
