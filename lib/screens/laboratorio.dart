@@ -9,6 +9,8 @@ import 'package:sceii/screens/lista_actividades.dart';
 import 'package:sceii/screens/lista_alumnos.dart';
 import '../models/alumno.dart';
 import '../models/student.dart';
+import 'package:qrscan/qrscan.dart' as scanner;
+import 'package:url_launcher/url_launcher.dart';
 
 class laboratorio extends StatefulWidget {
   TextEditingController controlador = TextEditingController();
@@ -73,7 +75,15 @@ class _laboratorioState extends State<laboratorio> {
         },
 
       ),
-      drawer: _getDrawer(context),
+        floatingActionButton:FloatingActionButton(
+            child: Icon(Icons.format_list_bulleted,size: 30,),
+            backgroundColor: Color.fromRGBO(70, 165, 37, 1),
+            onPressed:()async{
+              await openDialog3();
+            }
+
+        ),
+        drawer: _getDrawer(context),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
         children: <Widget>[
@@ -86,7 +96,7 @@ class _laboratorioState extends State<laboratorio> {
 
                 borderRadius: BorderRadius.circular(25),
                 image: DecorationImage(
-                    image: NetworkImage("https://krear3d.com/wp-content/uploads/2019/08/procesos-de-manufactura-tradicional.jpg"),
+                    image: NetworkImage("https://i.imgur.com/l5kHdYQ.jpeg"),
                     //image: AssetImage("assets/materia1.jpg"),
                     fit:BoxFit.cover
                 ),
@@ -133,11 +143,12 @@ class _laboratorioState extends State<laboratorio> {
                                               mainAxisAlignment: MainAxisAlignment.start,
                                               //crossAxisAlignment:CrossAxisAlignment.start ,
                                               children: [
-                                                Expanded( child: Text("Maestro",style: TextStyle(color: Colors.white,fontSize:18),textAlign: TextAlign.left)),
+                                                Expanded( child: Text("Encargado",style: TextStyle(color: Colors.white,fontSize:18),textAlign: TextAlign.left)),
                                                 Icon(Icons.book_rounded),
                                               ]
                                           ),
-                                          onPressed: () {
+                                          onPressed: () async {
+                                            await openDialog2();
                                           })
                                     )
                                     )
@@ -167,6 +178,8 @@ class _laboratorioState extends State<laboratorio> {
                                                         ]
                                                     ),
                                                     onPressed: () {
+                                                      Navigator.push(context,
+                                                          MaterialPageRoute(builder: (context) => listAlumnos()));
                                                     })
                                             )
                                         )
@@ -294,7 +307,14 @@ class _laboratorioState extends State<laboratorio> {
               margin: const EdgeInsets.only(left: 10.0, right: 10.0),
               color: Colors.transparent,
               elevation: 0,
-              child: Column(
+              child:
+              InkWell(
+                onTap: (){
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => listActividades()));
+                },
+                child: (
+              Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -337,7 +357,7 @@ class _laboratorioState extends State<laboratorio> {
                     // MaterialPageRoute(builder: (context) => Pagina02()));
                   })*/
                 ],
-              ),
+              ))),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
               ),
@@ -382,5 +402,337 @@ class _laboratorioState extends State<laboratorio> {
             ),
           ],
         ));
+  }
+
+
+  Future<bool?> openDialog2()=> showDialog<bool>(
+
+    context: context,
+    builder: (context)=>AlertDialog(
+      backgroundColor: Color.fromRGBO(23, 32, 42, 1),
+      shape:  RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),),
+      title: Text("Datos del encargado", style: TextStyle(color: Colors.white)),
+      content: Container(
+        height: 200,
+        child: Column(
+          children: [
+            CircleAvatar(
+              backgroundColor: Color.fromRGBO(23, 32, 42, 1),
+              radius: 60,
+              child: CircleAvatar(
+                backgroundColor: Colors.transparent,
+                radius: 55,
+                backgroundImage: AssetImage('assets/encargado.png'),
+              ),
+            ),
+            Text("Marco Isaías Ramírez García", style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold, fontSize: 18)),
+            Text("19030260@itcelaya.edu.mx", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
+          ],
+        ),
+
+
+        //TextField(
+        //controller: controlador,
+        //autofocus: true,
+        //)
+
+      ),
+      actions: [
+        Container(
+          height: 40,
+          width: 110,
+          //padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+          //margin: const EdgeInsets.only(left: 30.0, right: 30.0),
+          child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  primary: const Color.fromRGBO(222, 23, 59 , 1),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20))),
+              child: const Text(
+                'Atras',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
+        ),
+        Container(
+          height: 40,
+          width: 110,
+          //padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+          //margin: const EdgeInsets.only(left: 30.0, right: 30.0),
+          child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  primary: const Color.fromRGBO(70, 165, 37, 1),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20))),
+              child: const Text(
+                'Ok',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
+              onPressed: () async {
+                Navigator.pop(context);
+              }
+          ),
+        ),
+      ],
+    ),
+  );
+
+
+  Future<bool?> openDialog3()=> showDialog<bool>(
+
+    context: context,
+    builder: (context)=>AlertDialog(
+      backgroundColor: Color.fromRGBO(23, 32, 42, 1),
+      shape:  RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),),
+      title: Text("Registro en bitacora", style: TextStyle(color: Colors.white)),
+      content: Container(
+        height: 300,
+        child: Column(
+          children: [
+            Container(
+              margin: const EdgeInsets.fromLTRB(0, 10, 0, 10)),
+            Text("Registra tu entrada/salida del laboratorio escenneando el codigo QR", style: TextStyle(color: Colors.white)),
+
+            Container(
+                margin:  const EdgeInsets.fromLTRB(0, 20, 0, 10),
+                child: CircleAvatar(
+                  backgroundColor: Colors.green,
+                  radius: 50,
+                  child: Center(child: IconButton(iconSize:60,icon: Icon(Icons.qr_code_scanner,color: Colors.white), onPressed: () {  _leerCodigo();},)),
+                )),
+          ],
+        ),
+
+
+        //TextField(
+        //controller: controlador,
+        //autofocus: true,
+        //)
+
+      ),
+      actions: [
+        Container(
+          height: 40,
+          width: 110,
+          //padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+          //margin: const EdgeInsets.only(left: 30.0, right: 30.0),
+          child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  primary: const Color.fromRGBO(222, 23, 59 , 1),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20))),
+              child: const Text(
+                'Atras',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
+        ),
+      ],
+    ),
+  );
+  Future<bool?> openDialog4()=> showDialog<bool>(
+
+    context: context,
+    builder: (context)=>AlertDialog(
+      backgroundColor: Color.fromRGBO(23, 32, 42, 1),
+      shape:  RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),),
+      title: Text("Entrada exitosa", style: TextStyle(color: Colors.white)),
+      content: Container(
+        height: 300,
+        child: Column(
+          children: [
+            Container(
+                margin: const EdgeInsets.fromLTRB(0, 10, 0, 10)),
+            Text("Registro de entrada exitoso", style: TextStyle(color: Colors.white)),
+
+            Container(
+                margin:  const EdgeInsets.fromLTRB(0, 20, 0, 10),
+                child: CircleAvatar(
+                  backgroundColor: Colors.green,
+                  radius: 50,
+                  child: Center(child: IconButton(iconSize:60,icon: Icon(Icons.check_circle,color: Colors.white), onPressed: () {  },)),
+                )),
+          ],
+        ),
+
+
+        //TextField(
+        //controller: controlador,
+        //autofocus: true,
+        //)
+
+      ),
+      actions: [
+        Container(
+          height: 40,
+          width: 110,
+          //padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+          //margin: const EdgeInsets.only(left: 30.0, right: 30.0),
+          child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  primary: const Color.fromRGBO(222, 23, 59 , 1),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20))),
+              child: const Text(
+                'Atras',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
+        ),
+      ],
+    ),
+  );
+
+  Future<bool?> openDialog5()=> showDialog<bool>(
+
+    context: context,
+    builder: (context)=>AlertDialog(
+      backgroundColor: Color.fromRGBO(23, 32, 42, 1),
+      shape:  RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),),
+      title: Text("Entrada exitosa", style: TextStyle(color: Colors.white)),
+      content: Container(
+        height: 300,
+        child: Column(
+          children: [
+            Container(
+                margin: const EdgeInsets.fromLTRB(0, 10, 0, 10)),
+            Text("Registro de salida exitoso", style: TextStyle(color: Colors.white)),
+
+            Container(
+                margin:  const EdgeInsets.fromLTRB(0, 20, 0, 10),
+                child: CircleAvatar(
+                  backgroundColor: Colors.green,
+                  radius: 50,
+                  child: Center(child: IconButton(iconSize:60,icon: Icon(Icons.check_circle,color: Colors.white), onPressed: () {  },)),
+                )),
+          ],
+        ),
+
+
+        //TextField(
+        //controller: controlador,
+        //autofocus: true,
+        //)
+
+      ),
+      actions: [
+        Container(
+          height: 40,
+          width: 110,
+          //padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+          //margin: const EdgeInsets.only(left: 30.0, right: 30.0),
+          child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  primary: const Color.fromRGBO(222, 23, 59 , 1),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20))),
+              child: const Text(
+                'Atras',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
+        ),
+      ],
+    ),
+  );
+
+
+  Future<bool?> openDialog6()=> showDialog<bool>(
+
+    context: context,
+    builder: (context)=>AlertDialog(
+      backgroundColor: Color.fromRGBO(23, 32, 42, 1),
+      shape:  RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),),
+      title: Text("Error de lectura", style: TextStyle(color: Colors.white)),
+      content: Container(
+        height: 300,
+        child: Column(
+          children: [
+            Container(
+                margin: const EdgeInsets.fromLTRB(0, 10, 0, 10)),
+            Text("Registro no validado", style: TextStyle(color: Colors.white)),
+
+            Container(
+                margin:  const EdgeInsets.fromLTRB(0, 20, 0, 10),
+                child: CircleAvatar(
+                  backgroundColor: Colors.red,
+                  radius: 50,
+                  child: Center(child: IconButton(iconSize:60,icon: Icon(Icons.error,color: Colors.white), onPressed: () {  },)),
+                )),
+          ],
+        ),
+
+
+        //TextField(
+        //controller: controlador,
+        //autofocus: true,
+        //)
+
+      ),
+      actions: [
+        Container(
+          height: 40,
+          width: 110,
+          //padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+          //margin: const EdgeInsets.only(left: 30.0, right: 30.0),
+          child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  primary: const Color.fromRGBO(222, 23, 59 , 1),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20))),
+              child: const Text(
+                'Atras',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
+        ),
+      ],
+    ),
+  );
+
+  void _leerCodigo() async {
+    String resultado = "";
+    String? cameraScanResult = await scanner.scan();
+    resultado = cameraScanResult!;
+    setState(() {
+      switch (resultado) {
+        case "entrada":
+          {
+            openDialog4();
+          }
+          break;
+        case "salida":
+          {
+            openDialog5();
+          }
+          break;
+        default:
+          {
+            openDialog6();
+          }
+          break;
+      }
+      /* (resultado == "entrada")
+          ? lectura = "Registro de entrada exitoso"
+          : lectura = "Error en lectura";
+      (resultado == "salida")
+          ? lectura = "Registro de salida exitoso"
+          : lectura = "Error en lectura";*/
+    });
   }
 }

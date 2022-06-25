@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/alumno.dart';
 class http_service{
-static const String apiURL = "http://192.168.1.106/api/sceii_api.php";
+static const String apiURL = "https://overhanded-extensio.000webhostapp.com/bd/sceii_api.php";
 
 Future<dynamic> get() async{
   dynamic data;
@@ -23,23 +23,76 @@ Future<List> logear(String correo, String password) async {
         "password": password
       }
   );
+  print(response.body);
   return json.decode(response.body);
 }
 
-Future<void> addAlumno(alumno a) async {
-  final response =
-      await http.post(Uri.parse(apiURL), body: {
-    "metodo" : "insertAlumno",
+Future<String> addAlumno(alumno a) async {
+  print(a.nombre);
+  String url = "https://overhanded-extensio.000webhostapp.com/api-sceii/v1/routes/registro.php?tipo=alumno";
+
+  Map data = {
     "nombre": a.nombre,
     "apellidos": a.apellidos,
-     "clave" : a.password,
+    "clave" : a.password,
     "genero": a.genero,
     "no_control": a.noControl,
     "id_carrera": a.carrera,
     "correo": a.correo,
     "id_semestre": a.semestre,
-    "fecha_nac" : a.fecha_nac
-  });
+    "fecha_nacimiento" : a.fecha_nac
+  };
+  //encode Map to JSON
+  var body = json.encode(data);
+  http.Response response;
+  try{
+    response =
+    await http.post(Uri.parse(url),  headers: {"Content-Type": "application/json"},//No le está enviando los datos
+        body: body);
+    String jsonsDataString = response.body.toString(); // toString of Response's body is assigned to jsonDataString
+    var datas = jsonDecode(jsonsDataString);
+    print(datas.toString());
+    print(response.statusCode);
+    return datas.toString();
+  }
+  on Exception catch (e){
+    return e.toString();
+  }
+
+}
+
+
+Future<List> getMaterias(int id) async {
+  final response =
+  await http.post(Uri.parse(apiURL),
+      body:{
+        "metodo": "getMaterias",
+        "id_alumno": id.toString(),
+      }
+  );
+  return json.decode(response.body);
+}
+Future<List> getMateriasDocente(int id) async {
+  final response =
+  await http.post(Uri.parse(apiURL),
+      body:{
+        "metodo": "getMateriasDocente",
+        "id_docente": id.toString(),
+      }
+  );
+  return json.decode(response.body);
+}
+
+Future<void> addMateria(String nombre, String id_docente, String id_semestre) async {
+  final response =
+  await http.post(Uri.parse(apiURL),
+      body:{
+        "metodo": "creaMateria",
+        "nombre": nombre,
+        "id_docente": id_docente,
+        "id_semestre": id_semestre
+      }
+  );
   print(response.body);
   print(response.statusCode);
 }

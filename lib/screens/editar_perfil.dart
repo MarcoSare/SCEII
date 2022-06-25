@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:sceii/screens/widget.dart';
+import 'package:sceii/screens/model%20widget/widget.dart';
 
 
 class editPerfil extends StatefulWidget {
@@ -18,8 +18,10 @@ class editPerfil extends StatefulWidget {
 }
 
 class _editPerfilState extends State<editPerfil> {
-  textFormField2 nombre = textFormField2("Nombre", "Cambia tu nombre", "error",Icons.drive_file_rename_outline);
-  int _currentIndex = 0;
+  textFormField2 nombre = textFormField2("Johan Rafael","Nombre", "Cambia tu nombre", "error",Icons.drive_file_rename_outline);
+  textFormField2 apellidos = textFormField2("Rojas Cardenas","Apellidos", "Cambia tu apellidos", "error",Icons.drive_file_rename_outline);
+  textChangedPass password = textChangedPass("","Contraseña", "Cambia tu contraseña", "error",Icons.drive_file_rename_outline);
+    int _currentIndex = 0;
   _editPerfilState(){
 
   }
@@ -68,13 +70,17 @@ class _editPerfilState extends State<editPerfil> {
 
       ),
       drawer: _getDrawer(context),
-      body: Column(
+      body: ListView(
+          padding: const EdgeInsets.fromLTRB(20, 40, 20, 0),
         children: <Widget>[
           Container(
-            margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-            padding: const EdgeInsets.fromLTRB(0, 60, 0, 0),
-            child: Row(
+            alignment: Alignment.center,
+            margin: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
+
                 CircleAvatar(
                   backgroundColor: Color.fromRGBO(23, 32, 42, 1),
                   radius: 60,
@@ -84,118 +90,63 @@ class _editPerfilState extends State<editPerfil> {
                     backgroundImage: AssetImage('assets/johan.jpg'),
                   ),
                 ),
-                Expanded(
-                    child: Text("Rojas Cardenas Johan", style: TextStyle(fontSize: 24,color: Colors.white,fontFamily: "PopPins"),)
-                )
+                Transform.translate(offset: Offset(50,-40),
+                  child:
+                  CircleAvatar(
+                    backgroundColor: Color.fromRGBO(23, 32, 42, 1),
+                    radius: 30,
+                  child: IconButton(icon: Icon(Icons.add_a_photo,color: Colors.white,size: 30,), onPressed: () {  },),
+                )),
               ],
             ),
           ),
+       Text("Editar perfil", style: TextStyle(color: Colors.white, fontFamily: "PopPins", fontSize: 28),textAlign: TextAlign.center,),
+       nombre,
+          apellidos,
+          password,
           Container(
-              height: 530,
-              margin: const EdgeInsets.fromLTRB(10, 0, 10, 50),
-              padding: const EdgeInsets.fromLTRB(10, 0, 10, 50),
+            margin: const EdgeInsets.fromLTRB(10, 20, 10, 0),
               child:
-              ListView(
-                  children: <Widget>[
-                    Container(
-                        height:50,
-                        margin: const EdgeInsets.fromLTRB(0, 0, 0, 15),
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(color: Colors.white70),
-                          ),
-                        ),
-                        child:
-                        ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.transparent,
-                              elevation: 0,
-                            ),
-                            onPressed: () {
-                            },
-                            child:
-                            Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Icon(Icons.settings, size: 30,),
-                                  Expanded( child: Text("Configuracion",style: TextStyle(color: Colors.white,fontSize:20),textAlign: TextAlign.left)),
-                                ]
-                            ))),
-
-                    Container(
-                        height:50,
-                        margin: const EdgeInsets.fromLTRB(0, 0, 0, 15),
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(color: Colors.white70),
-                          ),
-                        ),
-                        child:
-                        ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.transparent,
-                              elevation: 0,
-                            ),
-                            onPressed: () {
-                            },
-                            child:
-                            Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Icon(Icons.book, size: 30,),
-                                  Expanded( child: Text("item",style: TextStyle(color: Colors.white,fontSize:20),textAlign: TextAlign.left)),
-                                ]
-                            ))),
-                    Container(
-                        height:50,
-                        margin: const EdgeInsets.fromLTRB(0, 0, 0, 15),
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(color: Colors.white70),
-                          ),
-                        ),
-                        child:
-                        ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.transparent,
-                              elevation: 0,
-                            ),
-                            onPressed: () {
-                            },
-                            child:
-                            Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Icon(Icons.book, size: 30,),
-                                  Expanded( child: Text("item-2",style: TextStyle(color: Colors.white,fontSize:20),textAlign: TextAlign.left)),
-                                ]
-                            ))),
-                    Container(
-                        height:50,
-                        margin: const EdgeInsets.fromLTRB(0, 0, 0, 15),
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(color: Colors.white70),
-                          ),
-                        ),
-                        child:
-                        ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.transparent,
-                              elevation: 0,
-                            ),
-                            onPressed: () {
-                            },
-                            child:
-                            Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Icon(Icons.logout, size: 30,color: Colors.red,),
-                                  Expanded( child: Text("Cerrar sesión",style: TextStyle(color: Colors.red,fontSize:20),textAlign: TextAlign.left)),
-                                ]
-                            ))),nombre
-                  ]))],
-      ),
+          Row(
+            mainAxisAlignment:MainAxisAlignment.center,
+            children:[
+          Container(
+            height: 50,
+            width: 150,
+            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+            //margin: const EdgeInsets.only(left: 30.0, right: 30.0),
+            child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    primary: const Color.fromRGBO(70, 165, 37, 1),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20))),
+                child: const Text(
+                  'Guardar',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                ),
+                onPressed: () {
+                  //showAlu();
+                }),
+          ),
+          Container(
+            height: 50,
+            width: 150,
+            //padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+            //margin: const EdgeInsets.only(left: 30.0, right: 30.0),
+            child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    primary: const Color.fromRGBO(222, 23, 59 , 1),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20))),
+                child: const Text(
+                  'Cancelar',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                ),
+                onPressed: () {
+                  //showAlu();
+                }),
+          )])),
+                  ]),
     );
   }
 

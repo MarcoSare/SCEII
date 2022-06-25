@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sceii/tools/Dateformat.dart';
 
-import 'login.dart';
-
-
-
-
+import '../../utils/responsive.dart';
 
 class getDropdownButton extends StatefulWidget {
   String sele;
@@ -46,7 +42,7 @@ class _getDropdownButtonState extends State<getDropdownButton> {
       underline: Container(
           decoration: BoxDecoration(border: Border(bottom: BorderSide.none))),
       value: dropdownValue,
-      style: TextStyle(color: Colors.white, fontSize: 20),
+      style: TextStyle(color: Colors.white, fontSize: 20,fontFamily: "PopPins"),
       dropdownColor: Color.fromRGBO(60, 60, 60, 0.90),
       onChanged: (String? newValue) {
         setState(() {
@@ -85,16 +81,25 @@ class textFormField extends StatefulWidget{
 class _textFormFieldState extends State<textFormField> {
   @override
   Widget build(BuildContext context) {
+    final Responsive responsive = Responsive.of(context);
+    bool isTablet = responsive.isTablet;
+    double marginTB = responsive.dp(0.4);
+    if(isTablet)
+        marginTB = responsive.dp(0.4);
+
+
     return  Form(
       key: widget.formKey,
       child:
           Container(
-              padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+
+              margin:  EdgeInsets.fromLTRB(0, marginTB, 0, marginTB),
         child: TextFormField(
+
             inputFormatters: [
               LengthLimitingTextInputFormatter(50),
             ],
-        style: const TextStyle(color: Colors.white, fontSize: 20),
+        style:  TextStyle(color: Colors.white, fontSize: isTablet?responsive.dp(1.5):responsive.dp(2),fontFamily: "PopPins"),
         decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
@@ -107,9 +112,13 @@ class _textFormFieldState extends State<textFormField> {
               borderSide: BorderSide(color: Colors.red)),
           labelText: widget.label,
           hintText: widget.hint,
-          hintStyle: TextStyle(fontSize: 20.0, color: Colors.white60),
-          prefixIcon: Icon(widget.icono, size: 25, color: Colors.white),
-          labelStyle: TextStyle(color: Colors.white, fontSize: 20),
+          hintStyle: TextStyle(fontSize: responsive.dp(2), color: Colors.white60),
+          prefixIcon: Container(
+              margin:  EdgeInsets.fromLTRB(responsive.wp(1), 0, responsive.wp(1), 0),
+              child:
+              Icon(widget.icono, size: responsive.dp(3), color: Colors.white)
+          ),
+          labelStyle: TextStyle(color: Colors.white, fontSize: isTablet?responsive.dp(1.5):responsive.dp(2)),
 
         ),
     onSaved: (value){
@@ -147,8 +156,15 @@ class textFieldPass extends StatefulWidget{
 class _textFieldPassState extends State<textFieldPass> {
   @override
   Widget build(BuildContext context) {
+    final Responsive responsive = Responsive.of(context);
+    bool isTablet = responsive.isTablet;
+    double marginTB = responsive.dp(0.5);
+    if(isTablet)
+        marginTB = responsive.dp(0.4);
+
     return  Container(
-        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+        margin: EdgeInsets.fromLTRB(0, marginTB, 0, marginTB),
+
         child: Form(
         key: widget.formKey,
         child:
@@ -157,7 +173,7 @@ class _textFieldPassState extends State<textFieldPass> {
         LengthLimitingTextInputFormatter(50),
         ],
             obscureText: widget.visible,
-            style: const TextStyle(color: Colors.white, fontSize: 20),
+            style: TextStyle(color: Colors.white, fontSize: responsive.dp(2),fontFamily: "PopPins"),
             decoration: InputDecoration(
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),
@@ -170,13 +186,18 @@ class _textFieldPassState extends State<textFieldPass> {
                   borderSide: BorderSide(color: Colors.red)),
               labelText: "Contraseña",
               hintText: ("Ingrese su contraseña"),
-              hintStyle: TextStyle(fontSize: 20.0, color: Colors.white60),
-              prefixIcon: Icon(Icons.vpn_key_sharp, size: 25, color: Colors.white),
+              hintStyle: TextStyle(fontSize: responsive.dp(2), color: Colors.white60),
+              prefixIcon:
+              Container(
+                margin:  EdgeInsets.fromLTRB(responsive.wp(1), 0, responsive.wp(1), 0),
+                child: Icon(Icons.vpn_key_sharp, size: responsive.dp(3), color: Colors.white),
+              ),
+
               suffixIcon: IconButton(
                 icon: widget.visible ?  Icon(Icons.visibility_off, color: Colors.white70,)
                     : Icon(Icons.visibility, color: Color.fromRGBO(112, 173, 71, 1)), onPressed: () {setState(() => widget.visible = !widget.visible); },
               ),
-              labelStyle: TextStyle(color: Colors.white, fontSize: 20),
+              labelStyle: TextStyle(color: Colors.white, fontSize: responsive.dp(2)),
 
             ),
             onSaved: (value){
@@ -282,6 +303,7 @@ class datePickerState extends State<datePicker> {
 
 
 class textFormField2 extends StatefulWidget{
+  String inicial;
   String label;
   String hint;
   String msgError;
@@ -289,7 +311,7 @@ class textFormField2 extends StatefulWidget{
   var controlador;
   var  error = false;
   GlobalKey<FormState> formKey =  GlobalKey<FormState>();
-  textFormField2(this.label,this.hint,this.msgError,this.icono){
+  textFormField2(this.inicial,this.label,this.hint,this.msgError,this.icono){
   }
   @override
   State<StatefulWidget> createState() => _textFormField2State();
@@ -305,11 +327,21 @@ class _textFormField2State extends State<textFormField2> {
         Container(
             padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
             child: TextFormField(
+              initialValue: widget.inicial,
                 inputFormatters: [
                   LengthLimitingTextInputFormatter(50),
                 ],
                 style: const TextStyle(color: Colors.white, fontSize: 20),
                 decoration: InputDecoration(
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.green),
+                    ),
+                  errorBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red),
+                ),
                   labelText: widget.label,
                   hintText: widget.hint,
                   hintStyle: TextStyle(fontSize: 20.0, color: Colors.white60),
@@ -334,5 +366,166 @@ class _textFormField2State extends State<textFormField2> {
                   widget.error=false;
                 })
             )));
+  }
+}
+
+class textChangedPass extends StatefulWidget{
+  String inicial;
+  String label;
+  String hint;
+  String msgError;
+  IconData icono;
+  var visible = true;
+  var controlador;
+  var  error = false;
+  GlobalKey<FormState> formKey =  GlobalKey<FormState>();
+  textChangedPass(this.inicial,this.label,this.hint,this.msgError,this.icono){
+  }
+  @override
+  State<StatefulWidget> createState() => _textChangedPassState();
+//State<getDropdownButton> createState() => _getDropdownButtonState(sele);
+}
+
+class _textChangedPassState extends State<textChangedPass> {
+  @override
+  Widget build(BuildContext context) {
+    return  Form(
+        key: widget.formKey,
+        child:
+        Container(
+            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+            child: TextFormField(
+
+                inputFormatters: [
+                  LengthLimitingTextInputFormatter(50),
+                ],
+                obscureText: widget.visible,
+                style: const TextStyle(color: Colors.white, fontSize: 20),
+                decoration: InputDecoration(
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green),
+                  ),
+                  errorBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red),
+                  ),
+                  suffixIcon: IconButton(
+                    icon: widget.visible ?  Icon(Icons.visibility_off, color: Colors.white70,)
+                        : Icon(Icons.visibility, color: Color.fromRGBO(112, 173, 71, 1)), onPressed: () {setState(() => widget.visible = !widget.visible); },
+                  ),
+                  labelText: widget.label,
+                  hintText: widget.hint,
+                  hintStyle: TextStyle(fontSize: 20.0, color: Colors.white60),
+                  prefixIcon: Icon(widget.icono, size: 25, color: Colors.white),
+                  labelStyle: TextStyle(color: Colors.white, fontSize: 20),
+
+                ),
+                onSaved: (value){
+                  widget.controlador = value;
+                }, autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: (value){
+                  if(value!.isEmpty){
+                    return "Llene este campo";
+                  }
+                  else
+                  if(widget.error){
+                    return widget.msgError;
+                  }
+                },
+                onChanged: (value) => setState((){
+                  widget.controlador = value;
+                  widget.error=false;
+                })
+            )));
+  }
+}
+
+
+class DropdownImg extends StatefulWidget {
+  late String control;
+
+  DropdownImg();
+
+  @override
+  State<DropdownImg> createState() => _DropdownImgState();
+}
+
+class _DropdownImgState extends State<DropdownImg> {
+  String dropdownValue = "Imagen 1";
+
+  _DropdownImgState() {}
+
+  @override
+  Widget build(BuildContext context) {
+    widget.control = dropdownValue;
+    return Container(
+        alignment: Alignment.center,
+        margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+        padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+        height: 150,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            image: DecorationImage(
+                image: AssetImage("assets/img_"+widget.control.split(" ")[1]+".jpg"),
+                fit:BoxFit.cover
+            ),
+            border: Border.all(
+                color: Colors.white,
+                width: 1.0
+            )
+        ),
+        child:
+            Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        gradient: LinearGradient(
+                            begin: Alignment.center,
+                            end: Alignment.topCenter,
+                            colors: [
+                              Colors.transparent,
+                              Colors.black
+                            ]
+                        )),
+              child:
+          Column(
+            children: [
+              DropdownButton<String>(
+                icon: Icon(Icons.expand_more),
+                iconEnabledColor: Colors.white,
+                isExpanded: true,
+                underline: Container(
+                    decoration: BoxDecoration(border: Border(bottom: BorderSide.none))),
+                value: dropdownValue,
+                style: TextStyle(color: Colors.white, fontSize: 20),
+                dropdownColor: Color.fromRGBO(60, 60, 60, 0.90),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    dropdownValue = newValue!;
+                    widget.control = dropdownValue;
+                  });
+                },
+                items: [
+                  "Imagen 1",
+                  "Imagen 2",
+                  "Imagen 3",
+                  "Imagen 4",
+                  "Imagen 5",
+                  "Imagen 6",
+                  "Imagen 7",
+                  "Imagen 8",
+                  "Imagen 9",
+                  "Imagen 10",
+    ].map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+            ],
+          ))
+       );
   }
 }

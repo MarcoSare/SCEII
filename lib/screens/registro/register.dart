@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sceii/models/alumno.dart';
 import 'package:sceii/models/alumnoDatos.dart';
-import 'package:sceii/screens/widget.dart';
+import 'package:sceii/screens/registro/registro_alumno.dart';
+import 'package:sceii/screens/registro/registro_docente.dart';
+import 'package:sceii/screens/registro/registro_visitante.dart';
+import 'package:sceii/screens/model%20widget/widget.dart';
 import 'package:sceii/services/httpService.dart';
 import 'package:sceii/tools/Dateformat.dart';
 
@@ -18,7 +21,7 @@ class _registroState extends State<registro> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.grey[900],
+        backgroundColor: Color.fromRGBO(23, 32, 42, 1),
         body: ListView(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 50),
             children: <Widget>[
@@ -56,14 +59,14 @@ class _registroState extends State<registro> {
               child: Text(
                 'Registro',
                 style: TextStyle(
-                    fontSize: 32, color: Colors.white),
+                    fontSize: 32, color: Colors.white,fontFamily: "Poppins",fontWeight: FontWeight.bold),
               )),
               Container(
                   padding: const EdgeInsets.fromLTRB(0, 0, 0, 50),
               child: Text(
                 'Registrate como:',
                 style: TextStyle(
-                    fontSize: 20, color: Colors.white),
+                    fontSize: 20, color: Colors.white,fontFamily: "Poppins"),
               ))
           ] ,
         )
@@ -74,14 +77,16 @@ class _registroState extends State<registro> {
           margin: const EdgeInsets.fromLTRB(60, 0, 60, 0),
           child:  ElevatedButton(
               style: ElevatedButton.styleFrom(
-                  primary: const Color.fromRGBO(112, 173, 71, 1),
+                  primary: const Color.fromRGBO(70, 165, 37, 1),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10))),
               child: const Text(
                 'Jefe de laboratorio',
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(fontSize: 20,fontFamily: "Poppins",fontWeight: FontWeight.bold),
               ),
               onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => registroDocente()));
               }),
         ),Container(
                 height: 80,
@@ -89,14 +94,16 @@ class _registroState extends State<registro> {
                 margin: const EdgeInsets.fromLTRB(60, 0, 60, 0),
                 child:  ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        primary: const Color.fromRGBO(112, 173, 71, 1),
+                        primary: const Color.fromRGBO(70, 165, 37, 1),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
                     child: const Text(
                       'Alumno',
-                      style: TextStyle(fontSize: 20),
+                      style: TextStyle(fontSize: 20,fontFamily: "Poppins",fontWeight: FontWeight.bold),
                     ),
                     onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => registroAlumno()));
                     }),
               ),Container(
                 height: 80,
@@ -104,14 +111,16 @@ class _registroState extends State<registro> {
                 margin: const EdgeInsets.fromLTRB(60, 0, 60, 0),
                 child:  ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        primary: const Color.fromRGBO(112, 173, 71, 1),
+                        primary: const Color.fromRGBO(70, 165, 37, 1),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
                     child: const Text(
                       'Maestro',
-                      style: TextStyle( fontSize: 20),
+                      style: TextStyle( fontSize: 20,fontFamily: "Poppins",fontWeight: FontWeight.bold),
                     ),
                     onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => registroDocente()));
                     }),
               ),Container(
                 height: 80,
@@ -119,18 +128,19 @@ class _registroState extends State<registro> {
                 margin: const EdgeInsets.fromLTRB(60, 0, 60, 0),
                 child:  ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        primary: const Color.fromRGBO(112, 173, 71, 1),
+                        primary: const Color.fromRGBO(70, 165, 37, 1),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
                     child: const Text(
                       'Visitante',
-                      style: TextStyle(fontSize: 20),
+                      style: TextStyle(fontSize: 20,fontFamily: "Poppins",fontWeight: FontWeight.bold),
+
                     ),
                     onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => registroVisitante()));
                     }),
               )
-
-
             ])
     );
 

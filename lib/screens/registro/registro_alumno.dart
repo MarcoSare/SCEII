@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sceii/models/alumno.dart';
 import 'package:sceii/models/alumnoDatos.dart';
-import 'package:sceii/screens/widget.dart';
+import 'package:sceii/screens/home_alumno.dart';
+import 'package:sceii/screens/model%20widget/widget.dart';
 import 'package:sceii/services/httpService.dart';
 import 'package:sceii/tools/Dateformat.dart';
 
@@ -58,7 +59,9 @@ class _registroAlumnoState extends State<registroAlumno> {
           leading: IconButton(
             icon: Icon(Icons.arrow_back_ios_sharp),
             tooltip: 'Menu Icon',
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pop(context);
+            },
           )
       ),
       body: ListView(
@@ -108,7 +111,6 @@ class _registroAlumnoState extends State<registroAlumno> {
                   apellidos,
                   correo,
                   noControl,
-                  institucion,
                   password,
                   listGenero,
                   listCarrera,
@@ -132,9 +134,46 @@ class _registroAlumnoState extends State<registroAlumno> {
                             Icon(Icons.login),
                           ]
                       ),
-                      onPressed: () {
-                        if(valiAlumno())
-                          addAlumno();
+                      onPressed: () async {
+                        if(valiAlumno()){
+                         var r = await addAlumno();
+                         showDialog<String>(
+                           context: context,
+                           builder: (BuildContext context) => AlertDialog(
+                             title: const Text('AlertDialog Title'),
+                             content: Text(r.toString()),
+                             actions: <Widget>[
+                               TextButton(
+                                 onPressed: () => Navigator.pop(context, 'Cancel'),
+                                 child: const Text('Cancel'),
+                               ),
+                               TextButton(
+                                 onPressed: () => Navigator.pop(context, 'OK'),
+                                 child: const Text('OK'),
+                               ),
+                             ],
+                           ),
+                         );
+                         //Navigator.push(context,
+                             //MaterialPageRoute(builder: (context) => homeAlumno(r)));
+                         /*
+
+                         if(r==0)
+                           Navigator.push(context,
+                               MaterialPageRoute(builder: (context) => homeAlumno()));
+                         else
+                           if(r==1){
+                             correo.error=true;
+                             correo.formKey.currentState!.validate();
+                           }
+                           else
+                           if(r==2){
+                             noControl.error=true;
+                             noControl.formKey.currentState!.validate();
+                           }*/
+
+                        }
+
                       }))])
                 ,
               )]
@@ -162,7 +201,7 @@ class _registroAlumnoState extends State<registroAlumno> {
 
 
 
-  void addAlumno(){
+  Future<String> addAlumno() async {
     String nombre_a = nombre.controlador;
     print(nombre_a);
     String apellidos_a = apellidos.controlador;
@@ -181,9 +220,10 @@ class _registroAlumnoState extends State<registroAlumno> {
     print(semestre_a);
     String fecha_a = datePicker_w.fecha_return;
     print(fecha_a);
-    alumno Alumno = alumno(nombre_a, apellidos_a, correo_a, no_control_a, password_a,
+    alumno Alumno = alumno.add(nombre_a, apellidos_a, correo_a, no_control_a, password_a,
         genero_a, semestre_a, carrera_a,fecha_a);
-    this.http.addAlumno(Alumno);
+    String r = await this.http.addAlumno(Alumno);
+    return r;
   }
 
   String getGenero(){

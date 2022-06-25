@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:sceii/models/alumno.dart';
+import 'package:sceii/screens/cuestionario.dart';
 import 'package:sceii/screens/editar_perfil.dart';
 import 'package:sceii/screens/home_alumno.dart';
+import 'package:sceii/screens/home_profesor.dart';
 import 'package:sceii/screens/laboratorio.dart';
 import 'package:sceii/screens/lista_actividades.dart';
 import 'package:sceii/screens/login.dart';
 
 import 'package:sceii/screens/lista_alumnos.dart';
 import 'package:sceii/screens/perfil.dart';
-import 'package:sceii/screens/register.dart';
+import 'package:sceii/screens/prestamos.dart';
+import 'package:sceii/screens/sideBar.dart';
+import 'package:sceii/screens/registro/register.dart';
 import 'package:sceii/screens/registro.dart';
-import 'package:sceii/screens/registro_alumno.dart';
-import 'package:sceii/screens/registro_docente.dart';
-import 'package:sceii/screens/registro_visitante.dart';
+import 'package:sceii/screens/registro/registro_alumno.dart';
+import 'package:sceii/screens/registro/registro_docente.dart';
+import 'package:sceii/screens/registro/registro_visitante.dart';
+
+import 'screens/sideBar.dart';
 //import 'package:untitled2/screens/pagina02.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,17 +43,20 @@ class MyApp extends StatelessWidget {
       ],
       title: "SCEII",
       home: Scaffold(
-        body: perfil()
-        //homeAlumno(Alumno: getAlumno(),listMaterias:getlist())
+        body:login()
+        //homeAlumno()
+
+        //login()//sideBarPerfil()
+        //homeDocente()
       ),
     );
   }
 
-  alumno getAlumno(){
-    alumno a = alumno("Marco","Ramirez","19030260@itcelaya.edu.mx","19030260","123","m","5","sistemas","199-10-25");
-    a.id=1;
-    return a;
-  }
+  //alumno getAlumno(){
+    //alumno a = alumno("Marco","Ramirez","19030260@itcelaya.edu.mx","19030260","123","m","5","sistemas","199-10-25");
+    //a.id=1;
+    //return a;
+  //}
 
   List getlist(){
     List lista =[];

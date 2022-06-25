@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sceii/models/alumno.dart';
 import 'package:sceii/models/alumnoDatos.dart';
-import 'package:sceii/screens/widget.dart';
+import 'package:sceii/screens/model%20widget/widget.dart';
 import 'package:sceii/services/httpService.dart';
 import 'package:sceii/tools/Dateformat.dart';
 
@@ -136,7 +136,7 @@ class _regiAlumnoState extends State<regiAlumno> {
                       child: const Text('Registrar'),
                       onPressed: () {
                         if(valiAlumno())
-                        addAlumno();
+                       print("a");
                       })
                 ],
               )),
@@ -165,29 +165,7 @@ class _regiAlumnoState extends State<regiAlumno> {
 
 
 
- void addAlumno(){
-    String nombre_a = nombre.controlador;
-    print(nombre_a);
-    String apellidos_a = apellidos.controlador;
-    print(apellidos_a);
-    String correo_a = correo.controlador;
-    print(correo_a);
-    String no_control_a = noControl.controlador;
-    print(no_control_a);
-    String password_a = password.controlador;
-    print(password_a);
-    String genero_a = getGenero();
-    print(genero_a);
-    String carrera_a = getCarrera();
-    print(carrera_a);
-    String semestre_a = getSemestre();
-    print(semestre_a);
-    String fecha_a = datePicker_w.fecha_return;
-    print(fecha_a);
-    alumno Alumno = alumno(nombre_a, apellidos_a, correo_a, no_control_a, password_a,
-                            genero_a, semestre_a, carrera_a,fecha_a);
-    this.http.addAlumno(Alumno);
-    }
+
 
     String getGenero(){
     String genero = listGenero.control;

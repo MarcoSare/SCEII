@@ -1,5 +1,10 @@
 
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
+
+import 'cuestionario.dart';
+import 'package:qrscan/qrscan.dart' as scanner;
+import 'package:url_launcher/url_launcher.dart';
 
 class listActividades extends StatefulWidget {
   const listActividades({Key? key}) : super(key: key);
@@ -12,24 +17,143 @@ class _listActividadesState extends State<listActividades> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[900],
+      backgroundColor: Color.fromRGBO(19, 20, 20, 1),
       appBar: AppBar(
         title: Text('Bienvenido'),
-        backgroundColor: Color.fromRGBO(112, 173, 71, 1),
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_sharp),
+          onPressed: () {},
+        ),
+
       ),
       drawer: _getDrawer(context),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(0, 50, 0, 50),
+        padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
         children: <Widget>[
-          _getCard(context),
-          _getCard(context)
-        ],
+          Container(
+            margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(color: Colors.white70),
+                ),
+              ),
+
+            child:  ElevatedButton(
+              style: ElevatedButton.styleFrom(
+              primary: Colors.transparent,
+              elevation: 0,
+              ),
+              onPressed: () {
+              },
+            child: Row(
+            children: [
+              Container(
+                margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                child: Icon(
+                  Icons.videocam, size: 40, color: Colors.green,),),
+              Expanded(
+                  child:Text("Videos de seguridad", style: TextStyle(color: Colors.white, fontFamily: "PopPins", fontSize: 20),textAlign: TextAlign.left,)
+              ),
+              Container(
+                margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                child: Icon(
+                  Icons.star, size: 30, color: Colors.green,),),
+            ],
+          )),
+          ),Container(
+            margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(color: Colors.white70),
+              ),
+            ),
+
+            child:  ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.transparent,
+                  elevation: 0,
+                ),
+                onPressed: () {
+                },
+                child: Row(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: Icon(
+                        Icons.note_alt, size: 40, color: Colors.green,),),
+                    Expanded(
+                        child: InkWell(
+                        onTap: (){
+          Navigator.push(context,
+          MaterialPageRoute(builder: (context) => cuestionario()));
+                },
+              child:
+                        Text("Cuestionario de seguridad", style: TextStyle(color: Colors.white, fontFamily: "PopPins", fontSize: 20),textAlign: TextAlign.left,)
+                    )),
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: Icon(
+                        Icons.star, size: 30, color: Colors.green,),),
+                  ],
+                )),
+          ),
+          Container(
+            margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(color: Colors.white70),
+              ),
+            ),
+
+            child:  ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.transparent,
+                  elevation: 0,
+                ),
+                onPressed: () {
+                },
+                child: Row(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: Icon(
+                        Icons.note_alt, size: 40, color: Colors.white,),),
+                    Expanded(
+                        child:Text("Cuestionario de protoclos", style: TextStyle(color: Colors.white, fontFamily: "PopPins", fontSize: 20),textAlign: TextAlign.left,)
+                    ),
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: Icon(
+                        Icons.star, size: 30, color: Colors.white,),),
+                  ],
+                )),
+          ),
+          Container(
+              margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+              child: Column(
+                  children:[
+                    Text("Tu proceso: 66%", style: TextStyle(color: Colors.white, fontFamily: "PopPins", fontSize: 20, fontWeight:FontWeight.bold),textAlign: TextAlign.center,),
+                    LinearPercentIndicator(
+                        width: 370.0,
+                        lineHeight: 20,
+                        percent: 0.66,
+                        progressColor: Color.fromRGBO(70, 165, 37, 1)
+                    )
+                  ]
+
+              ))],
       ),
       floatingActionButton:FloatingActionButton(
-        child: Icon(Icons.add),
+        child: Icon(Icons.qr_code_scanner),
         backgroundColor: Colors.green,
         onPressed:(){
-
+          openDialog3();
         },
       ) ,
     );
@@ -129,5 +253,69 @@ class _listActividadesState extends State<listActividades> {
             ),
           ],
         ));
+  }
+
+  Future<bool?> openDialog3()=> showDialog<bool>(
+
+    context: context,
+    builder: (context)=>AlertDialog(
+      backgroundColor: Color.fromRGBO(23, 32, 42, 1),
+      shape:  RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),),
+      title: Text("Escaner de enlaces", style: TextStyle(color: Colors.white)),
+      content: Container(
+        height: 200,
+        child: Column(
+          children: [
+            Container(
+                margin: const EdgeInsets.fromLTRB(0, 10, 0, 10)),
+            Text("Escanea el código QR del documento o vídeo", style: TextStyle(color: Colors.white)),
+
+            Container(
+                margin:  const EdgeInsets.fromLTRB(0, 20, 0, 10),
+                child: CircleAvatar(
+                  backgroundColor: Colors.green,
+                  radius: 50,
+                  child: Center(child: IconButton(iconSize:60,icon: Icon(Icons.qr_code_scanner,color: Colors.white), onPressed: () { _launchUrl(); },)),
+                )),
+          ],
+        ),
+
+
+        //TextField(
+        //controller: controlador,
+        //autofocus: true,
+        //)
+
+      ),
+      actions: [
+        Container(
+          height: 40,
+          width: 110,
+          //padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+          //margin: const EdgeInsets.only(left: 30.0, right: 30.0),
+          child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  primary: const Color.fromRGBO(222, 23, 59 , 1),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20))),
+              child: const Text(
+                'Atras',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
+        ),
+      ],
+    ),
+  );
+
+  void _launchUrl() async {
+    String resultado = "";
+    String? cameraScanResult = await scanner.scan();
+    resultado = cameraScanResult!;
+    Uri _url = Uri.parse(resultado);
+    if (!await launchUrl(_url)) throw 'Could not launch $_url';
   }
 }
