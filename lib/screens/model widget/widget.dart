@@ -8,8 +8,9 @@ class getDropdownButton extends StatefulWidget {
   String sele;
   List<String> lista;
   String control;
+  String label;
 
-  getDropdownButton(this.sele, this.lista, this.control);
+  getDropdownButton(this.sele, this.lista, this.control, this.label);
 
   @override
   State<getDropdownButton> createState() => _getDropdownButtonState(sele);
@@ -22,27 +23,32 @@ class _getDropdownButtonState extends State<getDropdownButton> {
 
   @override
   Widget build(BuildContext context) {
+    final Responsive responsive = Responsive.of(context);
+    bool isTablet = responsive.isTablet;
+    double marginTB = responsive.dp(0.4);
     widget.control = dropdownValue;
     return Container(
       alignment: Alignment.center,
-        margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-        padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-      height: 60,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-                color: Colors.white,
-                width: 1.0
-            )
-        ),
-        child: DropdownButton<String>(
+        margin:  EdgeInsets.fromLTRB(0, marginTB, 0, marginTB),
+
+        child: DropdownButtonFormField<String>(
+
       icon: Icon(Icons.expand_more),
       iconEnabledColor: Colors.white,
       isExpanded: true,
-      underline: Container(
-          decoration: BoxDecoration(border: Border(bottom: BorderSide.none))),
+          decoration: InputDecoration(
+              focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Color.fromRGBO(112, 173, 71, 1))),
+              enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.white)),
+              labelText: widget.label,
+            labelStyle: TextStyle(color: Colors.white, fontSize: isTablet?responsive.dp(1.5):responsive.dp(2),fontFamily: "PopPins")
+          ),
+
       value: dropdownValue,
-      style: TextStyle(color: Colors.white, fontSize: 20,fontFamily: "PopPins"),
+      style: TextStyle(color: Colors.white, fontSize: isTablet?responsive.dp(1.5):responsive.dp(2),fontFamily: "PopPins"),
       dropdownColor: Color.fromRGBO(60, 60, 60, 0.90),
       onChanged: (String? newValue) {
         setState(() {
@@ -52,6 +58,7 @@ class _getDropdownButtonState extends State<getDropdownButton> {
       },
       items: widget.lista.map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
+
           value: value,
           child: Text(value),
         );
@@ -67,11 +74,13 @@ class textFormField extends StatefulWidget{
   String label;
   String hint;
   String msgError;
+  int inputType;
+  int lenght;
   IconData icono;
   var controlador;
   var  error = false;
   GlobalKey<FormState> formKey =  GlobalKey<FormState>();
-  textFormField(this.label,this.hint,this.msgError,this.icono){
+  textFormField(this.label,this.hint,this.msgError,this.icono,this.inputType,this.lenght){
   }
   @override
   State<StatefulWidget> createState() => _textFormFieldState();
@@ -84,20 +93,15 @@ class _textFormFieldState extends State<textFormField> {
     final Responsive responsive = Responsive.of(context);
     bool isTablet = responsive.isTablet;
     double marginTB = responsive.dp(0.4);
-    if(isTablet)
-        marginTB = responsive.dp(0.4);
-
-
     return  Form(
       key: widget.formKey,
       child:
           Container(
-
               margin:  EdgeInsets.fromLTRB(0, marginTB, 0, marginTB),
-        child: TextFormField(
-
+            child: TextFormField(
+                textInputAction: TextInputAction.next,
             inputFormatters: [
-              LengthLimitingTextInputFormatter(50),
+              LengthLimitingTextInputFormatter(widget.lenght),
             ],
         style:  TextStyle(color: Colors.white, fontSize: isTablet?responsive.dp(1.5):responsive.dp(2),fontFamily: "PopPins"),
         decoration: InputDecoration(
@@ -112,15 +116,17 @@ class _textFormFieldState extends State<textFormField> {
               borderSide: BorderSide(color: Colors.red)),
           labelText: widget.label,
           hintText: widget.hint,
-          hintStyle: TextStyle(fontSize: responsive.dp(2), color: Colors.white60),
+
+          hintStyle: TextStyle(fontSize: isTablet?responsive.dp(1.5):responsive.dp(2), color: Colors.white60),
           prefixIcon: Container(
               margin:  EdgeInsets.fromLTRB(responsive.wp(1), 0, responsive.wp(1), 0),
               child:
               Icon(widget.icono, size: responsive.dp(3), color: Colors.white)
           ),
           labelStyle: TextStyle(color: Colors.white, fontSize: isTablet?responsive.dp(1.5):responsive.dp(2)),
-
+          errorStyle:   TextStyle(color: Colors.red, fontSize: responsive.dp(1.5)),
         ),
+                keyboardType: widget.inputType==0?TextInputType.number:TextInputType.text,
     onSaved: (value){
     widget.controlador = value;
     }, autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -169,6 +175,7 @@ class _textFieldPassState extends State<textFieldPass> {
         key: widget.formKey,
         child:
         TextFormField(
+            textInputAction: TextInputAction.next,
         inputFormatters: [
         LengthLimitingTextInputFormatter(50),
         ],
@@ -186,7 +193,7 @@ class _textFieldPassState extends State<textFieldPass> {
                   borderSide: BorderSide(color: Colors.red)),
               labelText: "Contraseña",
               hintText: ("Ingrese su contraseña"),
-              hintStyle: TextStyle(fontSize: responsive.dp(2), color: Colors.white60),
+              hintStyle: TextStyle(fontSize: isTablet?responsive.dp(1.5):responsive.dp(2), color: Colors.white60),
               prefixIcon:
               Container(
                 margin:  EdgeInsets.fromLTRB(responsive.wp(1), 0, responsive.wp(1), 0),
@@ -197,7 +204,8 @@ class _textFieldPassState extends State<textFieldPass> {
                 icon: widget.visible ?  Icon(Icons.visibility_off, color: Colors.white70,)
                     : Icon(Icons.visibility, color: Color.fromRGBO(112, 173, 71, 1)), onPressed: () {setState(() => widget.visible = !widget.visible); },
               ),
-              labelStyle: TextStyle(color: Colors.white, fontSize: responsive.dp(2)),
+              labelStyle: TextStyle(color: Colors.white, fontSize:  isTablet?responsive.dp(1.5):responsive.dp(2)),
+              errorStyle: TextStyle(color: Colors.red, fontSize: responsive.dp(1.5)),
 
             ),
             onSaved: (value){
@@ -226,7 +234,8 @@ class datePicker extends StatefulWidget{
   var fechaInicio = DateTime.now();
   var  fecha;
   var fecha_return;
-  datePicker(){
+  String label;
+  datePicker(this.label){
     formato = dateFormat();
     fecha = formato.showDate(DateTime.now());
     fecha_return = formato.f.format(DateTime.now());
@@ -241,15 +250,19 @@ class datePickerState extends State<datePicker> {
     return   Container(
         height: 60,
         margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-                color: Colors.white,
-                width: 1.0
-            )
+
+      child: InputDecorator(
+        decoration: InputDecoration(
+          focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: BorderSide(color: Color.fromRGBO(112, 173, 71, 1))),
+          enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: BorderSide(color: Colors.white)),
+          labelText: widget.label,
+          labelStyle: TextStyle(color: Colors.white),
         ),
-        child:
-        ElevatedButton(
+        child: ElevatedButton(
 
             style: ElevatedButton.styleFrom(
               primary: Colors.transparent,
@@ -266,7 +279,22 @@ class datePickerState extends State<datePicker> {
                   Expanded( child: Text(widget.fecha.toString(),style: TextStyle(color: Colors.white,fontSize:18),textAlign: TextAlign.left)),
                   Icon(Icons.calendar_today_sharp),
                 ]
-            )) );
+            ))
+      ),
+        /*
+       decoration: InputDecoration(
+              focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Color.fromRGBO(112, 173, 71, 1))),
+              enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.white)),
+              labelText: widget.label,
+            labelStyle: TextStyle(color: Colors.white, fontSize: isTablet?responsive.dp(1.5):responsive.dp(2),fontFamily: "PopPins")
+          )
+
+         */
+        );
   }
 
   void callDatePicker()async{

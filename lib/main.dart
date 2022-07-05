@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:sceii/models/alumno.dart';
@@ -27,11 +28,11 @@ void main() async{
   runApp(MyApp());
 }
 
-Future inicializacion(BuildContext? context)  async{
+Future inicializacion(BuildContext context)  async{
   await Future.delayed(Duration(seconds: 2));
 }
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

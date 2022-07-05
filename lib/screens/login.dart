@@ -2,11 +2,12 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:sceii/screens/home_alumno.dart';
+import 'package:sceii/screens/recuperacion%20cuenta/recuperacion_cuenta.dart';
 import 'package:sceii/screens/registro/register.dart';
 
 import 'package:sceii/screens/registro.dart';
 import 'package:sceii/screens/model%20widget/widget.dart';
-import 'package:sceii/services/httpService.dart';
+import 'package:sceii/services/htpp_servicies/httpService.dart';
 import 'package:sceii/utils/responsive.dart';
 
 import '../models/alumno.dart';
@@ -22,9 +23,9 @@ class login extends StatefulWidget {
 }
 
 class _loginState extends State<login> {
-  http_service http = http_service();
+  http_request http = http_request();
   textFormField correo = textFormField("Correo", "Ingrese tu correo",
-      "Usuario o contraseña incorrecta", Icons.email_rounded);
+      "Usuario o contraseña incorrecta", Icons.email_rounded,1,50);
   textFieldPass password = textFieldPass();
 
   @override
@@ -72,11 +73,18 @@ class _loginState extends State<login> {
                         Container(
 
                           child:
-                            Text(
-                              'Olvide mi contraseña',
-                              style: TextStyle(
-                                  fontSize: isTablet?responsive.dp(1.5):responsive.dp(2), color: Color.fromRGBO(70, 165, 37, 1),fontFamily: "Poppins"),
-                            ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) => recuperacionCuenta()));
+                                },
+                                child: Text(
+                                  'Olvide mi contraseña',
+                                  style: TextStyle(
+                                      fontSize: isTablet?responsive.dp(1.5):responsive.dp(2), color: Color.fromRGBO(70, 165, 37, 1),fontFamily: "Poppins"),
+                                ),
+                              ),
+
                         )
                         ,
                         Container(

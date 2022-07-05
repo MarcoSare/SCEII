@@ -11,7 +11,7 @@ import 'package:sceii/screens/perfil.dart';
 import 'package:sceii/screens/prestamos.dart';
 import 'package:sceii/screens/sideBar.dart';
 import 'package:sceii/screens/model%20widget/widget.dart';
-import 'package:sceii/services/httpService.dart';
+import 'package:sceii/services/htpp_servicies/httpService.dart';
 import '../models/alumno.dart';
 import '../models/student.dart';
 import 'laboratorio.dart';
@@ -33,7 +33,7 @@ class _homeAlumnoState extends State<homeAlumno> {
     sideBarPerfil(),
   ];
   late textFormField codigo = textFormField("Codigo", "Ingrese el código",
-      "", Icons.text_format);
+      "", Icons.text_format,1,50);
   late List  listmateria= [];
   TextEditingController controlador = TextEditingController();
   int _currentIndex = 0;
@@ -182,11 +182,11 @@ class bodyHome extends StatefulWidget {
 }
 class _bodyHomeState extends State<bodyHome> {
   late textFormField codigo = textFormField("Codigo", "Ingrese el código",
-      "", Icons.text_format);
+      "", Icons.text_format,1,50);
   late List  listmateria= [];
   bool bandera=true;
   TextEditingController controlador = TextEditingController();
-  http_service  httpService = http_service();
+  http_request  httpService = http_request();
   @override
   Widget build(BuildContext context) {
     return

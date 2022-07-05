@@ -1,11 +1,14 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:sceii/models/alumno.dart';
 import 'package:sceii/models/alumnoDatos.dart';
 import 'package:sceii/screens/model%20widget/widget.dart';
-import 'package:sceii/services/httpService.dart';
+import 'package:sceii/services/htpp_servicies/register.dart';
 import 'package:sceii/tools/Dateformat.dart';
+
+import '../../models/docente.dart';
+import '../../utils/responsive.dart';
+import '../model widget/emailFormField.dart';
+import '../model widget/openDialog.dart';
 
 class registroDocente extends StatefulWidget {
   const registroDocente({Key? key}) : super(key: key);
@@ -16,38 +19,29 @@ class registroDocente extends StatefulWidget {
 class _registroDocenteState extends State<registroDocente> {
   _registroDocenteState(){
     dateFormat fo = dateFormat();
-    //fecha_nac = fo.showDate(DateTime.now());
     fecha_nac= fo.showDate(DateTime.now());
   }
-  dateFormat fo = dateFormat();
   var fecha_nac;
-  http_service http = http_service();
-  datePicker  datePicker_w = datePicker();
-  final fechaInicio = DateTime.now();
+  datePicker  datePicker_w = datePicker("Fecha de nacimiento");
+  register http_register = register();
   alumnoDatos alumDatos = alumnoDatos();
-  String dropdownValue ="alumno";
-  List<String> usuarios = ["alumno", "docente", "visitante"];
-
   late getDropdownButton listGenero =
-  getDropdownButton(alumDatos.generos[0], alumDatos.generos, alumDatos.genero);
-  late getDropdownButton listSemestre =
-  getDropdownButton(alumDatos.semestres[0], alumDatos.semestres, alumDatos.semestre);
-  late getDropdownButton listCarrera =
-  getDropdownButton(alumDatos.carreras[0], alumDatos.carreras, alumDatos.carrera);
-
+  getDropdownButton(alumDatos.generos[0], alumDatos.generos, alumDatos.genero,"Genero");
   late textFormField nombre = textFormField("Nombre", "Ingrese tu nombre(s)",
-      "", Icons.account_circle);
+      "", Icons.account_circle,1,50);
   late textFormField apellidos = textFormField("Apellidos", "Ingrese tu apellidos(s)",
-      "", Icons.account_circle);
-  textFormField correo = textFormField("Correo", "Ingrese tu correo",
-      "Correo incorecto", Icons.email_rounded);
+      "", Icons.account_circle,1,50);
+  emailFormField correo = emailFormField("Correo", "Ingrese tu correo",
+      "El correo ya se encuentra registrado");
   textFieldPass password = textFieldPass();
-  textFormField noControl = textFormField("No. Control", "Ingrese tu no. Control",
-      "", Icons.switch_account_rounded);
-  textFormField institucion = textFormField("Institucion", "Ingrese tu institución",
-      "", Icons.maps_home_work_rounded);
+
+
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
+    final Responsive responsive = Responsive.of(context);
+    final isTablet = responsive.isTablet;
     return Scaffold(
       backgroundColor: Color.fromRGBO(19, 20, 20, 1),
       appBar: AppBar(
@@ -66,46 +60,30 @@ class _registroDocenteState extends State<registroDocente> {
       body: ListView(
           padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
           children: <Widget>[
-            //Container(
-            //margin: EdgeInsets.only(left: 20.0, right: 20.0),
-            //padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
             Container(
-              margin: EdgeInsets.only(left: 100.0, right: 100.0),
-              alignment: Alignment.center,
-              width: 130,
-              height: 100,
-              child: Icon(Icons.book_rounded, color: Colors.white, size: 100,),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                //image: DecorationImage(
-                //  image: AssetImage('assets/alumno.png'),
-                //fit: BoxFit.fill),
-              ),
+                margin: EdgeInsets.only(left: 100.0, right: 100.0),
+                alignment: Alignment.center,
+                width: 130,
+                height: 100,
+                child: Icon(Icons.book_rounded,color: Colors.white, size: 100,)
             ),
             Container(
               padding: const EdgeInsets.fromLTRB(20, 40, 20, 20),
+              margin: isTablet? EdgeInsets.fromLTRB(responsive.dp(7), responsive.dp(1), responsive.dp(7), responsive.dp(7)):null ,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
+                  borderRadius:!isTablet? BorderRadius.only(
                       topRight: Radius.circular(20),
-                      topLeft: Radius.circular(20)),
-                  gradient: LinearGradient(
-                    colors: [
-                      Color.fromRGBO(23, 32, 42, 1),
-                      Color.fromRGBO(23, 32, 42, 1),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  )),
+                      topLeft: Radius.circular(20)):BorderRadius.circular(20),
+                  color: Color.fromRGBO(23, 32, 42, 1)
+              ),
               child: Column(
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text("Registrarse", style: TextStyle(fontSize: 28,color: Colors.white,fontFamily: "Poppins",fontWeight: FontWeight.bold),),
-
+                        Text("Registrarse", style: TextStyle(fontSize: 28,color: Colors.white,fontFamily: "Poppins",fontWeight: FontWeight.bold),)
                       ],
                     ),
-
                     nombre,
                     apellidos,
                     correo,
@@ -124,15 +102,49 @@ class _registroDocenteState extends State<registroDocente> {
                             child:
                             Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
-                                //crossAxisAlignment:CrossAxisAlignment.start ,
                                 children: [
-                                  Expanded( child: Text("Registrarse",style: TextStyle(color: Colors.white,fontSize:18),textAlign: TextAlign.left)),
-                                  Icon(Icons.login),
+                                  Expanded( child: Text(!isLoading?"Registrarse":"Espere",style: TextStyle(color: Colors.white,fontSize:18),textAlign: TextAlign.left)),
+                                  !isLoading?Icon(Icons.login):Container(
+                                    child: CircularProgressIndicator(color: Colors.white,),
+                                    margin: EdgeInsets.fromLTRB(responsive.dp(1),responsive.dp(0.3),responsive.dp(1),responsive.dp(0.3)),
+                                  ),
                                 ]
                             ),
-                            onPressed: () {
-                              if(valiAlumno())
-                                print("alu");
+                            onPressed: () async {
+                              setState(() {
+                                isLoading = true;
+                              });
+                              if(valiUser()){
+                                var responde = await addDocente();
+                                setState(() {
+                                  isLoading = false;
+                                });
+                                if(!responde.containsKey('error')){
+                                  if(responde['message']=='Registro exitoso'){
+                                    openDialogSuccess alerta =openDialogSuccess("Registro Existoso", "Se ha enviado un enlace de confirmación a su correo");
+                                    Future<bool?> openDialog()=> showDialog<bool>(
+                                        context: context,
+                                        builder: (context)=>alerta);
+                                    await openDialog();
+                                    int count = 0;
+                                    Navigator.of(context).popUntil((_) => count++ >= 2);
+                                  }
+                                }else
+                                if(responde['error']=='El correo ya se encuentra registrado'){
+                                  correo.error=true;
+                                  correo.msgError = "El correo ya se encuentra registrado";
+                                  correo.formKey.currentState!.validate();
+                                }else{
+                                  openDialogError alerta =openDialogError("Error", responde['error']);
+                                  Future<bool?> openDialog()=> showDialog<bool>(
+                                      context: context,
+                                      builder: (context)=>alerta);
+                                  await openDialog();
+                                }
+                              }
+                              setState(() {
+                                isLoading = false;
+                              });
                             }))])
               ,
             )]
@@ -150,16 +162,19 @@ class _registroDocenteState extends State<registroDocente> {
     return false;
   }
 
-  bool valiAlumno(){
-    if(valiUser())
-      if(noControl.formKey.currentState!.validate())
-        return true;
-    return false;
+
+  Future<Map<String, dynamic>> addDocente() async {
+    String nombre = this.nombre.controlador;
+    String apellidos = this.apellidos.controlador;
+    String correo = this.correo.controlador;
+    String password = this.password.controlador;
+    String genero = getGenero();
+    String fecha = datePicker_w.fecha_return;
+    docente Docente = docente.add(nombre, apellidos, correo, password,
+        genero,fecha);
+    Map<String, dynamic> response = await this.http_register.addDocente(Docente);
+    return response;
   }
-
-
-
-
 
   String getGenero(){
     String genero = listGenero.control;
@@ -170,13 +185,4 @@ class _registroDocenteState extends State<registroDocente> {
     return"o";
   }
 
-  String getCarrera(){
-    int index = listCarrera.lista.indexOf(listCarrera.control)+1;
-    return index.toString();
-  }
-  String getSemestre(){
-    if(listSemestre.control=="Otro")
-      return "13";
-    return listSemestre.control;
-  }
 }

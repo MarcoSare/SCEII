@@ -9,7 +9,7 @@ import 'package:sceii/models/alumnoDatos.dart';
 import 'package:sceii/screens/lista_actividades.dart';
 import 'package:sceii/screens/lista_alumnos.dart';
 import 'package:sceii/screens/model%20widget/widget.dart';
-import 'package:sceii/services/httpService.dart';
+import 'package:sceii/services/htpp_servicies/httpService.dart';
 import '../models/alumno.dart';
 import '../models/student.dart';
 
@@ -25,14 +25,14 @@ class homeDocente extends StatefulWidget {
 class _homeDocenteState extends State<homeDocente> {
   alumnoDatos alumDatos = alumnoDatos();
   late getDropdownButton listSemestre =
-  getDropdownButton(alumDatos.semestres[0], alumDatos.semestres, alumDatos.semestre);
+  getDropdownButton(alumDatos.semestres[0], alumDatos.semestres, alumDatos.semestre,"");
   late DropdownImg lisImg = DropdownImg();
   late textFormField codigo = textFormField("Nombre", "Ingrese el nombre de la materia",
-      "", Icons.auto_stories);
+      "", Icons.auto_stories,1,50);
   late List  listmateria= [];
   bool bandera=true;
   TextEditingController controlador = TextEditingController();
-  http_service  httpService = http_service();
+  http_request httpService = http_request();
   int _currentIndex = 0;
 
   @override

@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:sceii/models/alumno.dart';
 import 'package:sceii/models/alumnoDatos.dart';
 import 'package:sceii/screens/model%20widget/widget.dart';
-import 'package:sceii/services/httpService.dart';
+import 'package:sceii/services/htpp_servicies/httpService.dart';
 import 'package:sceii/tools/Dateformat.dart';
 
 class regiAlumno extends StatefulWidget {
@@ -21,31 +21,31 @@ class _regiAlumnoState extends State<regiAlumno> {
   }
   dateFormat fo = dateFormat();
   var fecha_nac;
-  http_service http = http_service();
-  datePicker  datePicker_w = datePicker();
+  http_request http = http_request();
+  datePicker  datePicker_w = datePicker("fds");
   final fechaInicio = DateTime.now();
   alumnoDatos alumDatos = alumnoDatos();
    String dropdownValue ="alumno";
    List<String> usuarios = ["alumno", "docente", "visitante"];
 
   late getDropdownButton listGenero =
-      getDropdownButton(alumDatos.generos[0], alumDatos.generos, alumDatos.genero);
+      getDropdownButton(alumDatos.generos[0], alumDatos.generos, alumDatos.genero,"");
   late getDropdownButton listSemestre =
-      getDropdownButton(alumDatos.semestres[0], alumDatos.semestres, alumDatos.semestre);
+      getDropdownButton(alumDatos.semestres[0], alumDatos.semestres, alumDatos.semestre,"");
   late getDropdownButton listCarrera =
-      getDropdownButton(alumDatos.carreras[0], alumDatos.carreras, alumDatos.carrera);
+      getDropdownButton(alumDatos.carreras[0], alumDatos.carreras, alumDatos.carrera,"");
 
   late textFormField nombre = textFormField("Nombre", "Ingrese tu nombre(s)",
-      "", Icons.account_circle);
+      "", Icons.account_circle,1,50);
   late textFormField apellidos = textFormField("Apellidos", "Ingrese tu apellidos(s)",
-      "", Icons.account_circle);
+      "", Icons.account_circle,1,50);
   textFormField correo = textFormField("Correo", "Ingrese tu correo",
-      "Correo incorecto", Icons.email_rounded);
+      "Correo incorecto", Icons.email_rounded,1,50);
   textFieldPass password = textFieldPass();
   textFormField noControl = textFormField("No. Control", "Ingrese tu no. Control",
-      "", Icons.switch_account_rounded);
+      "", Icons.switch_account_rounded,1,50);
   textFormField institucion = textFormField("Institucion", "Ingrese tu institución",
-      "", Icons.maps_home_work_rounded);
+      "", Icons.maps_home_work_rounded,1,50);
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
 class Responsive {
-  double _width=0, _height=0, _diagonal=0, _fontSizeTitle=0, _fontSizeSubT = 0;
+  double _width=0, _height=0, _diagonal=0, _fontSizeTitle=0, _fontSizeSubT=0, _fontSizeNormal = 0;
   bool _isTablet=false;
 
   double get width => _width;
@@ -11,6 +11,7 @@ class Responsive {
   bool get isTablet =>_isTablet;
   double get fontSizeTilte => _fontSizeTitle;
   double get fontSizeSubT => _fontSizeSubT;
+  double get fontSizeNormal => _fontSizeNormal;
   static Responsive of(BuildContext context) => Responsive(context);
   Responsive(BuildContext context){
     final Size size = MediaQuery.of(context).size;
@@ -22,10 +23,12 @@ class Responsive {
     if(_isTablet){
       this._fontSizeTitle=dp(3);
       this._fontSizeSubT=dp(2);
+      this._fontSizeNormal=dp(1);
     }
     else{
       this._fontSizeTitle=dp(3.5);
       this._fontSizeSubT=dp(2);
+      this._fontSizeNormal=dp(1.5);
     }
     
   }
